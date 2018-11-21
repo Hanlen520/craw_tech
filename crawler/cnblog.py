@@ -31,7 +31,7 @@ class CnBlog(Crawler):
             res_list = []
             for post in posts:
 
-                p = ThirdPost(self.third_id, self.third_name)
+                p = ThirdPost(self.third_id, self.third_name,0)
                 post_a = post.find("a", class_="titlelnk")
                 #  # 跳转路由
                 p.redirect_url = post_a['href']
@@ -42,7 +42,7 @@ class CnBlog(Crawler):
                 # 创建时间
                 p.creatime = post_a.next_sibling.string
 
-                data = third_post_db.find_by_pt_id(p.post_id, self.third_id)
+                data = third_post_db.find_by_pt_id(p.post_id, p.third_id)
                 if data is None:
                     res_list.append(p)
             log.info("[%s]爬取-> %s  %d条记录", self.third_name, url, len(res_list))

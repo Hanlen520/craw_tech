@@ -34,7 +34,7 @@ class ImportNew(Crawler):
             posts = archive.find_all("div", class_="post")
             for post in posts:
 
-                p = ThirdPost(self.third_id, self.third_name)
+                p = ThirdPost(self.third_id, self.third_name,0)
 
                 post_meta = post.find("div", class_="post-meta")
                 post_a = post_meta.find("a", "meta-title")
@@ -52,7 +52,7 @@ class ImportNew(Crawler):
                 p.content = post.find("span", class_="excerpt").p.string
                 if p.content is None:
                     p.content = ""
-                data = third_post_db.find_by_pt_id(p.post_id, self.third_id)
+                data = third_post_db.find_by_pt_id(p.post_id, p.third_id)
                 if data is None:
                     res_list.append(p)
             log.info("[%s]爬取-> %s   %d条记录", self.third_name, url, len(res_list))

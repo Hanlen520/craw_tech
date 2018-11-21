@@ -29,7 +29,7 @@ class TuiKu(Crawler):
             # 多个文章解析
             for post in posts:
 
-                p = ThirdPost(self.third_id, self.third_name)
+                p = ThirdPost(self.third_id, self.third_name,0)
 
                 tip_spans = post.find("div", class_="tip").find_all("span")
 
@@ -47,7 +47,7 @@ class TuiKu(Crawler):
                 # 标签
                 p.tags = args[0]
 
-                data = third_post_db.find_by_pt_id(p.post_id, self.third_id)
+                data = third_post_db.find_by_pt_id(p.post_id, p.third_id)
                 if data is None:
                     res_list.append(p)
 

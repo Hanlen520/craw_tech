@@ -33,19 +33,18 @@ class JueJin(Crawler):
             # juejin response
             body_json = res.json()
             if body_json['s'] != 1:
-                log.error("爬取掘金失败"+body_json['m'])
+                log.error("爬取掘金失败" + body_json['m'])
                 return
             article_list = body_json['d']['entrylist']
 
             res_list = []
             for arti in article_list:
 
-                data = third_post_db.find_by_pt_id(
-                    arti['objectId'], self.third_id)
+                data = third_post_db.find_by_pt_id(arti['objectId'], self.third_id)
 
                 if data is None and arti['collectionCount'] > like_total:  # 大于30喜欢的加入
                     # 构建
-                    post = ThirdPost(self.third_id, self.third_name)
+                    post = ThirdPost(self.third_id, self.third_name, 0)
                     tags = []
                     for t in arti['tags']:
                         tags.append(t['title'])
@@ -71,9 +70,9 @@ class JueJin(Crawler):
         # 用户id
         uid = "57a358dc8ac247005f16735b"
         # token
-        token = "eyJhY2Nlc3NfdG9rZW4iOiJsbklETEdSU2RjajRPc29SIiwicmVmcmVzaF90b2tlbiI6Ik5RajNGTDc1Z3Bwd1o5OU8iLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfQ=="
+        token = "eyJhY2Nlc3NfdG9rZW4iOiJOMHlmaFh2OXo4ak1EVlFiIiwicmVmcmVzaF90b2tlbiI6IlBWTkZGdGZwS2VFQVlScTciLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfQ=="
         # 设备id
-        device_id = "1534834849402"
+        device_id = "1541467880947"
         # 全部热门
         url = "https://timeline-merger-ms.juejin.im/v1/get_entry_by_rank"
         param = {
@@ -97,5 +96,16 @@ class JueJin(Crawler):
             'recomment': 1,
             'period': 'week'
         }
+        paramFront = {
+            'src': src,
+            'uid': uid,
+            'token': token,
+            'limit': 20,
+            'device_id': device_id,
+            'category': "5562b415e4b00c57d9b94ac8",
+            'recomment': 1,
+            'period': 'week'
+        }
         self._craw(url, param, 40)
         self._craw(urlBackend, paramBackend, 30)
+        self._craw(urlBackend, paramFront, 30)

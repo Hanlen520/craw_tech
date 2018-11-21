@@ -36,7 +36,7 @@ class Imooc(Crawler):
 
             for post in posts:
 
-                p = ThirdPost(self.third_id, self.third_name)
+                p = ThirdPost(self.third_id, self.third_name,0)
 
                 post_a = post.find("a", "title")
                 # 标题
@@ -55,7 +55,7 @@ class Imooc(Crawler):
                 for tag in p_tags:
                     tags.append(tag.span.string)
                 p.tags = ",".join(tags)
-                data = third_post_db.find_by_pt_id(p.post_id, self.third_id)
+                data = third_post_db.find_by_pt_id(p.post_id, p.third_id)
                 if data is None:
                     res_list.append(p)
             log.info("[%s]爬取-> %s   %d条记录",
